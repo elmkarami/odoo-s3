@@ -26,23 +26,21 @@ def parse_bucket_url(bucket_url):
     # s3://<Your-AWS-Access-Key-ID>:<Your-AWS-Secret-Key>@<Your-S3-Bucket-name>+SSE
     # where +SSE is optional (meaning server-side encryption enabled)
 
-    try:
-        encryption_enabled = False
-        remain = bucket_url.lstrip(scheme)
-        access_key_id = remain.split(':')[0]
-        remain = remain.lstrip(access_key_id).lstrip(':')
-        secret_key = remain.split('@')[0]
-        remain = remain.lstrip(secret_key).lstrip('@').split('+')
-        bucket_name = remain[0]
-        encryption_enabled = len(remain) > 1
+    encryption_enabled = False
+    remain = bucket_url.lstrip(scheme)
+    access_key_id = remain.split(':')[0]
+    remain = remain.lstrip(access_key_id).lstrip(':')
+    secret_key = remain.split('@')[0]
+    remain = remain.lstrip(secret_key).lstrip('@').split('+')
+    bucket_name = remain[0]
+    encryption_enabled = len(remain) > 1
 
-        if not access_key_id or not secret_key:
-            raise Exception(
-                "No AWS access and secret keys were provided."
-                " Unable to establish a connexion to S3."
-            )
-    except Exception:
-        raise Exception("Unable to parse the S3 bucket url.")
+    if not access_key_id or not secret_key:
+        raise Exception(
+            "No AWS access and secret keys were provided."
+            " Unable to establish a connexion to S3."
+        )
+
 
     return (access_key_id, secret_key, bucket_name, encryption_enabled)
 
